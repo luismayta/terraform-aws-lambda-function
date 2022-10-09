@@ -420,3 +420,4 @@ zsdoc/data
 .terraform.lock.hcl
 TMP_CHANGELOG.md
 bin
+public

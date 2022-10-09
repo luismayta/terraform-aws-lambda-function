@@ -1,7 +1,7 @@
 <!-- Space: Projects -->
-<!-- Parent: TerraformModuleTemplate -->
-<!-- Title: Commands TerraformModuleTemplate -->
-<!-- Label: TerraformModuleTemplate -->
+<!-- Parent: TerraformAwsLambdaFunction -->
+<!-- Title: Commands TerraformAwsLambdaFunction -->
+<!-- Label: TerraformAwsLambdaFunction -->
 <!-- Label: Project -->
 <!-- Label: Commands -->
 <!-- Include: disclaimer.md -->

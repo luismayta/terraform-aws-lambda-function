@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://github.com/hadenlabs/terraform-module-template",
+  "baseUrl": "https://github.com/hadenlabs/terraform-aws-lambda-function",
   "ignorePatterns": [
     {
       "pattern": "^https://hadenlabs.com"
@@ -14,7 +14,7 @@
       "pattern": "^#requirement_terraform.*$"
     },
     {
-      "pattern": "^https://github.com/hadenlabs/terraform-module-template/compare"
+      "pattern": "^https://github.com/hadenlabs/terraform-aws-lambda-function/compare"
     }
   ],
   "replacementPatterns": [

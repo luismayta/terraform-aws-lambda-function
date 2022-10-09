@@ -1,7 +1,7 @@
 <!-- Space: Projects -->
-<!-- Parent: TerraformModuleTemplate -->
-<!-- Title: Releasing TerraformModuleTemplate -->
-<!-- Label: TerraformModuleTemplate -->
+<!-- Parent: TerraformAwsLambdaFunction -->
+<!-- Title: Releasing TerraformAwsLambdaFunction -->
+<!-- Label: TerraformAwsLambdaFunction -->
 <!-- Label: Project -->
 <!-- Label: Releasing -->
 <!-- Include: disclaimer.md -->
@@ -11,7 +11,7 @@
 
 ## Bump a new version
 
-Make a new version of terraform-module-template in the following steps:
+Make a new version of terraform-aws-lambda-function in the following steps:
 
 ### Generate version major
 
