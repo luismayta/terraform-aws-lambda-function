@@ -3,8 +3,8 @@ package config
 import (
 	"github.com/joho/godotenv"
 
-	coreconfig "github.com/hadenlabs/terraform-module-template/config"
-	"github.com/hadenlabs/terraform-module-template/internal/errors"
+	coreconfig "github.com/hadenlabs/terraform-aws-lambda-function/config"
+	"github.com/hadenlabs/terraform-aws-lambda-function/internal/errors"
 )
 
 func LoadEnvWithFilename(filename string) (*coreconfig.Config, error) {

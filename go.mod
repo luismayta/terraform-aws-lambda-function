@@ -1,4 +1,4 @@
-module github.com/hadenlabs/terraform-module-template
+module github.com/hadenlabs/terraform-aws-lambda-function
 
 go 1.16
 

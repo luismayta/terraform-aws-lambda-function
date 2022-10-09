@@ -1,7 +1,7 @@
 <!-- Space: Projects -->
-<!-- Parent: TerraformModuleTemplate -->
-<!-- Title: EnvVars TerraformModuleTemplate -->
-<!-- Label: TerraformModuleTemplate -->
+<!-- Parent: TerraformAwsLambdaFunction -->
+<!-- Title: EnvVars TerraformAwsLambdaFunction -->
+<!-- Label: TerraformAwsLambdaFunction -->
 <!-- Label: Project -->
 <!-- Label: EnvVars -->
 <!-- Include: disclaimer.md -->

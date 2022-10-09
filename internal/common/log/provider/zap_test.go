@@ -3,7 +3,7 @@ package provider
 import (
 	"testing"
 
-	"github.com/hadenlabs/terraform-module-template/internal/testutil/config"
+	"github.com/hadenlabs/terraform-aws-lambda-function/internal/testutil/config"
 )
 
 func zapForTest() (*ZapLog, func()) {
