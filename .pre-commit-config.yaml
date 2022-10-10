@@ -4,6 +4,9 @@ exclude: >
   (?x)^(
     ^(\/|)vendor\/(.*?)$|
     .+\.node_modules\/.*$|
+    .+\.external_modules.*$|
+    .+\.terraform.*$|
+    .+\.venv.*$|
     .+\.lock$|
   )$
 
@@ -56,7 +59,12 @@ repos:
       - id: markdown-link-check
         args:
           - --config=.ci/linters/markdown-link-config.json
-        exclude: \.tpl.md$
+        exclude: >
+          (?x)^(
+            docs\/include\/terraform.md$|
+            .+\.tpl.md$|
+          )$
+
       - id: shellcheck
         exclude: >
           (?x)^(
@@ -78,7 +86,10 @@ repos:
       - id: terragrunt-fmt
       - id: terraform-fmt
       - id: terraform-tfsec
-
+        exclude: >
+          (?x)^(
+            .+\.terraform.*$|
+          )$
       - id: gitleaks
         args:
           - --path=.
@@ -93,3 +104,7 @@ repos:
       - id: checkov
         args:
           - --config-file=.ci/linters/checkov.yml
+        exclude: >
+          (?x)^(
+            .+\.terraform.*$|
+          )$
