@@ -1,10 +1,10 @@
-module "label" {
+module "tags" {
   source    = "hadenlabs/tags/null"
   version   = ">=0.2"
-  namespace = var.namespace
-  stage     = var.stage
-  name      = var.function_name
-  tags      = var.tags
+  namespace = local.outputs.namespace
+  stage     = local.outputs.stage
+  name      = local.outputs.name
+  tags      = local.outputs.tags
 }
 
 locals {
@@ -38,9 +38,6 @@ locals {
     s3_object_version              = var.filename != null ? null : var.s3_object_version
     source_code_hash               = var.source_code_hash != null ? var.source_code_hash : var.filename != null ? filebase64sha256(var.filename) : null
   }
-}
-
-locals {
 
   generated = {
     enabled                        = local.input.enabled
@@ -73,13 +70,9 @@ locals {
     vpc_security_group_ids         = local.input.vpc_security_group_ids
   }
 
-}
-
-locals {
-
   outputs = {
     enabled       = local.generated.enabled
-    function_name = local.generated.use_fullname ? module.label.id_full : local.generated.function_name
+    function_name = local.generated.use_fullname ? module.tags.id_full : local.generated.function_name
     namespace     = local.generated.namespace
     stage         = local.generated.stage
     use_fullname  = local.generated.use_fullname
