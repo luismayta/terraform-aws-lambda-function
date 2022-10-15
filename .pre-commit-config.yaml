@@ -12,7 +12,7 @@ exclude: >
 
 repos:
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.1
+    rev: v2.2.2
     hooks:
       - id: codespell
         args: [--ignore-words=.codespell-ignores]
@@ -84,10 +84,6 @@ repos:
         args:
           - --fix
           - --config=.ci/linters/.golangci.yml
-
-      - id: terraform-tflint
-        args:
-          - '--config=.ci/linters/.tflint.hcl'
       - id: terragrunt-fmt
       - id: terraform-fmt
       - id: terraform-tfsec
@@ -101,7 +97,7 @@ repos:
         args:
           - --config=.ci/linters/.hadolint.yaml
   - repo: https://github.com/bridgecrewio/checkov.git
-    rev: '2.1.258'
+    rev: '2.1.270'
     hooks:
       - id: checkov
         args:

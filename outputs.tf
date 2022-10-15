@@ -11,9 +11,9 @@ output "guessed_function_arn" {
 
 # OUTPUT ALL RESOURCES AS FULL OBJECTS
 
-output "instance" {
+output "lambda" {
   description = "output instance repository"
-  value       = aws_lambda_function.this
+  value       = try(aws_lambda_function.this[0], null)
 }
 
 output "lambda_arn" {
@@ -51,7 +51,7 @@ output "permissions" {
 output "module_inputs" {
   description = "A map of all module arguments. Omitted optional arguments will be represented with their actual defaults."
   value = {
-    aliases                        = local.aliases
+    aliases                        = local.outputs.aliases
     dead_letter_config_target_arn  = local.outputs.dead_letter_config_target_arn
     description                    = local.outputs.description
     environment_variables          = local.outputs.environment_variables
@@ -62,7 +62,7 @@ output "module_inputs" {
     kms_key_arn                    = local.outputs.kms_key_arn
     layer_arns                     = local.outputs.layer_arns
     memory_size                    = local.outputs.memory_size
-    permissions                    = values(local.permissions)
+    permissions                    = values(local.outputs.permissions)
     publish                        = local.outputs.publish
     reserved_concurrent_executions = local.outputs.reserved_concurrent_executions
     runtime                        = local.outputs.runtime

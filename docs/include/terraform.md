@@ -5,14 +5,15 @@
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12.20, < 2.0 |
-| aws | >= 2.51, < 4.0 |
+| archive | >=2.2.0 |
+| aws | >= 3.0, < 4.0 |
 | null | >=0.1.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.51, < 4.0 |
+| aws | >= 3.0, < 4.0 |
 
 ## Modules
 
@@ -72,8 +73,8 @@
 | function | All outputs of the 'aws\_lambda\_function' resource. |
 | function\_name | function name of lambda. |
 | guessed\_function\_arn | Guessed function arn in the format: arn:aws:lambda:<region>:<account\_id>:function:<function\_name> |
-| instance | output instance repository |
 | invoke\_arn | Invoke ARN of function lambda |
+| lambda | output instance repository |
 | lambda\_arn | ARN of function lambda |
 | module\_inputs | A map of all module arguments. Omitted optional arguments will be represented with their actual defaults. |
 | permissions | A map of all created 'aws\_lambda\_permission' resources keyed by statement\_id. |

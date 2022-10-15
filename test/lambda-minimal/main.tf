@@ -52,7 +52,6 @@ module "main" {
   runtime  = var.runtime
   handler  = var.handler
   filename = data.archive_file.lambda.output_path
-  # source_code_hash = data.archive_file.lambda.output_base64sha256
 
   timeout     = var.timeout
   memory_size = var.memory_size

@@ -5,11 +5,12 @@ import (
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
+
 	"github.com/hadenlabs/terraform-aws-lambda-function/internal/app/external/faker"
 	"github.com/hadenlabs/terraform-aws-lambda-function/internal/testutil"
 )
 
-func Test{{pascalCase testName}}Success(t *testing.T) {
+func TestLambdaMinimal(t *testing.T) {
 	t.Parallel()
 
 	functionName := faker.Function().Name()
@@ -34,7 +35,7 @@ func Test{{pascalCase testName}}Success(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where the Terraform code is located
-        TerraformDir: "./lambda-{{dashCase testName}}",
+		TerraformDir: "./lambda-minimal",
 		Upgrade:      true,
 		Vars: map[string]interface{}{
 			"namespace":     namespace,
