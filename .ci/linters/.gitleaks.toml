@@ -172,6 +172,8 @@ title = "gitleaks config"
         regexes = [
             '''[a-zA-Z0-9._%+-]+@users.noreply.github.com''',
             '''[a-zA-Z0-9._%+-]+@yopmail.com''',
+            '''[a-zA-Z0-9._%+-]+@terraform-aws-lambda-function-test.com''',
+            '''security@hadenlabs.com''',
             '''git@github.com''',
             '''git@gitlab.com''',
             '''slovacus@gmail.com''',
