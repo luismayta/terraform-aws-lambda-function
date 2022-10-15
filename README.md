@@ -33,7 +33,7 @@ This is a list of plugins that need to be installed previously to enjoy all the 
 
 ```hcl
 module "main" {
-  source  = "hadenlabs/terraform-aws-lambda-function/aws"
+  source  = "hadenlabs/lambda-function/aws"
   version = "0.0.0"
 }
 ```
@@ -53,7 +53,7 @@ Full working examples can be found in [examples](./examples) folder.
 
 ```hcl
 module "main" {
-  source  = "hadenlabs/terraform-aws-lambda-function/aws"
+  source  = "hadenlabs/lambda-function/aws"
   version = "0.0.0"
 }
 ```
