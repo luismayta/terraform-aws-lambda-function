@@ -52,6 +52,7 @@ vars:
     .task
     .terraform.lock.hcl
     *.lock.hcl
+    *.zip
     .external_modules
 
 tasks:
@@ -118,9 +119,9 @@ tasks:
         [ -e ".env" ] || cp -rf .env.example .env
       - task: python:setup
       - task: python:precommit
-      - task: git:setup
       - task: go:setup
       - task: yarn:setup
+      - task: git:setup
 
   environment:
     desc: Setup environment of project
