@@ -2,7 +2,7 @@
 
 ```hcl
 module "main" {
-  source  = "hadenlabs/terraform-aws-lambda-function/aws"
+  source  = "hadenlabs/lambda-function/aws"
   version = "0.0.0"
 }
 ```
