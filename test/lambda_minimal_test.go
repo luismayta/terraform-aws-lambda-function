@@ -1,0 +1,63 @@
+package test
+
+import (
+	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/hadenlabs/terraform-aws-lambda-function/internal/app/external/faker"
+	"github.com/hadenlabs/terraform-aws-lambda-function/internal/testutil"
+)
+
+func TestLambdaMinimal(t *testing.T) {
+	t.Parallel()
+
+	functionName := faker.Function().Name()
+	namespace := testutil.Company
+	stage := testutil.Stage
+	enabled := true
+	useFullName := true
+	description := "A Lambda Function for the purpose of Unit Testing."
+
+	handler := "main.lambda_handler"
+	runtime := "python3.8"
+
+	publish := false
+	memorySize := float64(128)
+	timeout := float64(3)
+
+	tags := map[string]interface{}{
+		"tag1":        "tags1",
+		"Name":        functionName,
+		"Environment": "Dev",
+	}
+
+	terraformOptions := &terraform.Options{
+		// The path to where the Terraform code is located
+		TerraformDir: "./lambda-minimal",
+		Upgrade:      true,
+		Vars: map[string]interface{}{
+			"namespace":     namespace,
+			"stage":         stage,
+			"function_name": functionName,
+			"enabled":       enabled,
+			"tags":          tags,
+			"use_fullname":  useFullName,
+			"description":   description,
+			"handler":       handler,
+			"runtime":       runtime,
+			"publish":       publish,
+			"memory_size":   memorySize,
+			"timeout":       timeout,
+		},
+	}
+
+	// At the end of the test, run `terraform destroy` to clean up any resources that were created
+	defer terraform.Destroy(t, terraformOptions)
+
+	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
+	terraform.InitAndApply(t, terraformOptions)
+	outputLambda := terraform.Output(t, terraformOptions, "lambda")
+	assert.NotEmpty(t, outputLambda, outputLambda)
+}
