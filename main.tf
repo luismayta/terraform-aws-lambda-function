@@ -1,10 +1,10 @@
 module "tags" {
   source    = "hadenlabs/tags/null"
   version   = ">=0.2"
-  namespace = local.outputs.namespace
-  stage     = local.outputs.stage
-  name      = local.outputs.name
-  tags      = local.outputs.tags
+  namespace = var.namespace
+  stage     = var.stage
+  name      = var.function_name
+  tags      = var.tags
 }
 
 locals {
@@ -33,37 +33,62 @@ locals {
     tracing_mode                   = var.tracing_mode
     vpc_subnet_ids                 = var.vpc_subnet_ids
     vpc_security_group_ids         = var.vpc_security_group_ids
-    s3_bucket                      = var.filename != null ? null : var.s3_bucket
-    s3_key                         = var.filename != null ? null : var.s3_key
-    s3_object_version              = var.filename != null ? null : var.s3_object_version
-    source_code_hash               = var.source_code_hash != null ? var.source_code_hash : var.filename != null ? filebase64sha256(var.filename) : null
+    s3_bucket                      = var.s3_bucket
+    s3_key                         = var.s3_key
+    s3_object_version              = var.s3_object_version
+    source_code_hash               = var.source_code_hash
   }
 
   generated = {
-    enabled                        = local.input.enabled
-    function_name                  = local.input.function_name
-    namespace                      = local.input.namespace
-    stage                          = local.input.stage
-    use_fullname                   = local.input.use_fullname
-    tags                           = local.input.tags
-    handler                        = local.input.handler
-    runtime                        = local.input.runtime
-    aliases                        = local.input.aliases
-    dead_letter_config_target_arn  = local.input.dead_letter_config_target_arn
-    description                    = local.input.description
-    environment_variables          = local.input.environment_variables
-    filename                       = local.input.filename
-    kms_key_arn                    = local.input.kms_key_arn
-    layer_arns                     = local.input.layer_arns
-    memory_size                    = local.input.memory_size
-    permissions                    = local.input.permissions
+    enabled       = local.input.enabled
+    function_name = local.input.function_name
+    namespace     = local.input.namespace
+    stage         = local.input.stage
+    use_fullname  = local.input.use_fullname
+    tags          = local.input.tags
+    handler       = local.input.handler
+    runtime       = local.input.runtime
+    aliases = {
+      for name, config in local.input.aliases : name => {
+        description                = try(config.description, ""),
+        version                    = try(config.version, "$LATEST")
+        additional_version_weights = try(config.additional_version_weights, {})
+      }
+    }
+
+    dead_letter_config_target_arn = local.input.dead_letter_config_target_arn
+    description                   = local.input.description
+    environment_variables         = local.input.environment_variables
+    filename                      = local.input.filename
+    kms_key_arn                   = local.input.kms_key_arn
+    layer_arns                    = local.input.layer_arns
+    memory_size                   = local.input.memory_size
+
+    # ATTACH A MAP OF PERMISSIONS TO THE LAMBDA FUNCTION
+
+    permissions = {
+      for permission in local.input.permissions : permission.statement_id => {
+        statement_id       = permission.statement_id
+        action             = try(permission.action, "lambda:InvokeFunction")
+        event_source_token = try(permission.event_source_token, null)
+        principal          = permission.principal
+        qualifier          = try(permission.qualifier, null)
+        source_account     = try(permission.source_account, null)
+        source_arn         = permission.source_arn
+      }
+    }
+
     publish                        = local.input.publish
     reserved_concurrent_executions = local.input.reserved_concurrent_executions
     role_arn                       = local.input.role_arn
+    s3_bucket                      = local.input.filename != null ? null : local.input.s3_bucket
+    s3_key                         = local.input.filename != null ? null : local.input.s3_key
+    s3_object_version              = local.input.filename != null ? null : local.input.s3_object_version
+    source_code_hash               = local.input.source_code_hash != null ? local.input.source_code_hash : local.input.filename != null ? filebase64sha256(local.input.filename) : null
     s3_bucket                      = local.input.s3_bucket
     s3_key                         = local.input.s3_key
-    source_code_hash               = local.input.source_code_hash
     s3_object_version              = local.input.s3_object_version
+    source_code_hash               = local.input.source_code_hash
     timeout                        = local.input.timeout
     tracing_mode                   = local.input.tracing_mode
     vpc_subnet_ids                 = local.input.vpc_subnet_ids
@@ -95,8 +120,8 @@ locals {
     role_arn                       = local.generated.role_arn
     s3_bucket                      = local.generated.s3_bucket
     s3_key                         = local.generated.s3_key
-    source_code_hash               = local.generated.source_code_hash
     s3_object_version              = local.generated.s3_object_version
+    source_code_hash               = local.generated.source_code_hash
     timeout                        = local.generated.timeout
     tracing_mode                   = local.generated.tracing_mode
     vpc_subnet_ids                 = local.generated.vpc_subnet_ids
@@ -105,11 +130,11 @@ locals {
   }
 }
 
-
 resource "aws_lambda_function" "this" {
   count            = local.outputs.enabled ? 1 : 0
   function_name    = local.outputs.function_name
   description      = local.outputs.description
+  filename         = local.outputs.filename
   source_code_hash = local.outputs.source_code_hash
 
   s3_bucket         = local.outputs.s3_bucket
@@ -161,15 +186,6 @@ resource "aws_lambda_function" "this" {
   tags = local.outputs.tags
 }
 
-locals {
-  aliases = {
-    for name, config in local.outputs.aliases : name => {
-      description                = try(config.description, ""),
-      version                    = try(config.version, "$LATEST")
-      additional_version_weights = try(config.additional_version_weights, {})
-    }
-  }
-}
 
 resource "aws_lambda_alias" "this" {
 
@@ -183,24 +199,8 @@ resource "aws_lambda_alias" "this" {
   dynamic "routing_config" {
     for_each = length(each.value.additional_version_weights) > 0 ? [true] : []
 
-    oontent {
+    content {
       additional_version_weights = each.value.additional_version_weights
-    }
-  }
-}
-
-# ATTACH A MAP OF PERMISSIONS TO THE LAMBDA FUNCTION
-
-locals {
-  permissions = {
-    for permission in local.outputs.permissions : permission.statement_id => {
-      statement_id       = permission.statement_id
-      action             = try(permission.action, "lambda:InvokeFunction")
-      event_source_token = try(permission.event_source_token, null)
-      principal          = permission.principal
-      qualifier          = try(permission.qualifier, null)
-      source_account     = try(permission.source_account, null)
-      source_arn         = permission.source_arn
     }
   }
 }
