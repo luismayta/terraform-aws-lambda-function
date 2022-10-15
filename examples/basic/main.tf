@@ -1,3 +1,63 @@
+data "aws_iam_policy_document" "lambda" {
+  statement {
+    sid = "LambdaVPCAccess"
+
+    actions = [
+      "ec2:CreateNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:DetachNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+    ]
+
+    resources = ["*"]
+    effect    = "Allow"
+  }
+}
+
+module "iam_role" {
+  source  = "hadenlabs/iam-role/aws"
+  version = ">=0.1.0"
+
+  enabled   = var.enabled
+  name      = var.function_name
+  stage     = var.stage
+  namespace = var.namespace
+  tags      = var.tags
+
+  role_description = "role lambda"
+
+  policy_documents = [
+    data.aws_iam_policy_document.lambda.json,
+  ]
+  principals = {
+    Service = ["lambda.amazonaws.com"]
+  }
+
+}
+
 module "main" {
-  source = "../.."
+  source   = "../.."
+  role_arn = module.iam_role.arn
+  depends_on = [
+    module.iam_role,
+  ]
+  enabled       = var.enabled
+  stage         = var.stage
+  namespace     = var.namespace
+  tags          = var.tags
+  use_fullname  = var.use_fullname
+  function_name = var.function_name
+  description   = var.description
+
+  runtime  = var.runtime
+  handler  = var.handler
+  filename = data.archive_file.lambda.output_path
+  # source_code_hash = data.archive_file.lambda.output_base64sha256
+
+  timeout     = var.timeout
+  memory_size = var.memory_size
+
+  aliases = {
+    latest = {}
+  }
 }
